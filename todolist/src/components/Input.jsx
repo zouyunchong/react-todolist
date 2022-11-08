@@ -1,22 +1,11 @@
-import React, { Component } from 'react'
+import React,{useState} from 'react'
 import { nanoid } from 'nanoid'
 import { bus as $bus } from './bus'
-export default class Input extends Component {
-  constructor() {
-    super()
-    this.state = {
-      value:""
-    }
-  }
-  // 输入框输入事件
-  changeHandler = (e)=>{
-    this.setState({
-      value: e.target.value
-    })
-  }
-  // 添加
-  addHandler = ()=>{
-    let { value } = this.state;
+
+export default function Input() {
+  const [value,setValue] = useState('')
+  const addHandler=()=>{
+
     let obj = {
       id: nanoid(),
       content: value,
@@ -27,19 +16,16 @@ export default class Input extends Component {
     } else {
       alert("请输入")
     }
-    this.setState({
-        value:""
-    })
+    setValue('')
   }
-  render() {
-    let { value } = this.state
-    return (
-      <>
-        <div className="input">
-          <input type="text" value={value} placeholder='请输入你的任务名称，按Enter键确认' onChange={this.changeHandler}/>
-          <button className="btn btn-success" onClick={this.addHandler}>添加</button>
-        </div>
-      </>
-    )
-  }
+  const changeHandler=((e)=>{
+    setValue(e.target.value)
+  })
+  return (
+    <div className="input">
+      <input type="text" value={value} placeholder='请输入你的任务名称，按Enter键确认' onChange={changeHandler}/>
+      <button className="btn btn-success" onClick={addHandler}>添加</button>
+    </div>
+  )
 }
+

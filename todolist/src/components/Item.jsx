@@ -1,36 +1,36 @@
-import React, { Component } from 'react'
+
+
+import React from 'react'
 import { bus as $bus } from './bus'
-export default class Item extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
-  changeHandler = (id)=>{
-    let { checkHandler } = this.props;
-    return (e)=>{
+export default function Item(props) {
+  
+  let { item } = props;
+  console.log('item222222',item)
+    // localStorage.setItem("obj",JSON.stringify(item))
+  const changeHandler=(id,e)=>{
+    let { checkHandler } =props;
       checkHandler(id,e.target.checked)
-    }
+    
   }
-  removeHandler(){
-    let { delHandler } = this.props;
-    delHandler(arguments[0])
-  }
-  editHadnler = (item)=>{
+
+  const editHadnler=(item)=>{
     $bus.emit("getFlag",true)
     localStorage.setItem("obj",JSON.stringify(item))
     $bus.emit("getItem",item)
   }
-  render() {
-    let { item } = this.props;
-    return (
-      <li className="task-item">
-        <input type="checkbox" checked={item.checked} onChange={this.changeHandler(item.id)}/>
-        <div className="content">
-          {item.content}
-        </div>
-        <button className={`btn btn-success ${!item.checked ? "d-none" : "d-block"}`} onClick={()=> this.editHadnler(item)}>编辑</button>
-        <button className={`btn btn-danger ${!item.checked ? "d-none" : "d-block"}`} onClick={this.removeHandler.bind(this,item.id)}>删除</button>
-      </li>
-    )
+  const removeHandler=(id)=>{
+    console.log('id',id)
+    let { delHandler } = props;
+        delHandler(id)
   }
+  return (
+    <li className="task-item">
+        <input type="checkbox" checked={item.checked} onChange={(e)=>{changeHandler(item.id,e)}}/>
+         <div className="content">
+           {item.content}
+         </div>
+        <button className={`btn btn-success ${!item.checked ? "d-none" : "d-block"}`} onClick={()=>{editHadnler(item)}}>编辑</button>
+         <button className={`btn btn-danger ${!item.checked ? "d-none" : "d-block"}`} onClick={()=>{removeHandler(item.id)}}>删除</button>
+       </li>
+  )
 }
